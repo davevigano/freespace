@@ -7,6 +7,22 @@ a {
     color: inherit !important;
 }
 
+i {
+    transition: all .2s ease-in;
+}
+
+.count {
+    font-family: inherit !important;
+}
+
+.like-active {
+    color: #4287f5;
+}
+
+.dislike-active {
+    color: #f70505;
+}
+
 .float{
 	position: fixed;
 	width: 60px;
