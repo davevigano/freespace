@@ -1,12 +1,5 @@
 <?php
-    $host = "localhost";
-    $dbname = "freespace-db";
-    $user = "freespace";
-    $psw = "freespace-db";
-    $db = new mysqli($host, $user, $psw, $dbname);
-    if ($db->connect_error) {
-        die("Connection failed: " . $db->connect_error);
-    }
+    include_once('db.php');
 ?>
 <!DOCTYPE html>
 <html>
