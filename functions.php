@@ -3,36 +3,42 @@
 
     function new_post($author, $title, $content, $tags) {
         global $db;
-        $sql = "INSERT INTO post (post_id, post_title, post_content, post_author, post_tags, post_creation_time) VALUES (Null, '".addslashes($title)."', '".addslashes($content)."', '".addslashes($author)."', '".addslashes($tags)."', NOW())";
-        $db->query($sql);
+        $stmt = $db->prepare("INSERT INTO post (post_id, post_title, post_content, post_author, post_tags, post_creation_time) VALUES (Null, ?, ?, ?, ?, NOW())");
+        $stmt->bind_param("ssss", $title, $content, $author, $tags);
+        $stmt->execute();
     }
 
     function edit_like($action, $post_id) {
         global $db;
+        $post_id = (int)$post_id;
         if ($action == "add") {
-            $sql = "UPDATE post SET post_likes = post_likes + 1 WHERE post_id = ".$post_id;
-            $db->query($sql);
+            $stmt = $db->prepare("UPDATE post SET post_likes = post_likes + 1 WHERE post_id = ?");
         } else {
-            $sql = "UPDATE post SET post_likes = post_likes - 1 WHERE post_id = ".$post_id;
-            $db->query($sql);
+            $stmt = $db->prepare("UPDATE post SET post_likes = post_likes - 1 WHERE post_id = ?");
         }
+        $stmt->bind_param("i", $post_id);
+        $stmt->execute();
     }
 
     function edit_dislike($action, $post_id) {
         global $db;
+        $post_id = (int)$post_id;
         if ($action == "add") {
-            $sql = "UPDATE post SET post_dislikes = post_dislikes + 1 WHERE post_id = ".$post_id;
-            $db->query($sql);
+            $stmt = $db->prepare("UPDATE post SET post_dislikes = post_dislikes + 1 WHERE post_id = ?");
         } else {
-            $sql = "UPDATE post SET post_dislikes = post_dislikes - 1 WHERE post_id = ".$post_id;
-            $db->query($sql);
+            $stmt = $db->prepare("UPDATE post SET post_dislikes = post_dislikes - 1 WHERE post_id = ?");
         }
+        $stmt->bind_param("i", $post_id);
+        $stmt->execute();
     }
 
     function show_comments($post_id) {
         global $db;
-        $sql = "SELECT * FROM comment WHERE post_code = ".$post_id." ORDER BY comment_creation_time DESC";
-        $result = $db->query($sql);
+        $post_id = (int)$post_id;
+        $stmt = $db->prepare("SELECT * FROM comment WHERE post_code = ? ORDER BY comment_creation_time DESC");
+        $stmt->bind_param("i", $post_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
         if ($result) {
             if ($result->num_rows > 0) {
                 $html = "<input type=\"hidden\" id=\"post-id\" value=\"".$post_id."\">";
@@ -51,8 +57,10 @@
 
     function new_comment($author, $content, $post_id) {
         global $db;
-        $sql = "INSERT INTO comment (comment_id, comment_content, comment_author, comment_creation_time, post_code) VALUES (Null, '".addslashes($content)."', '".addslashes($author)."', NOW(), ".$post_id.")";
-        $db->query($sql);
+        $post_id = (int)$post_id;
+        $stmt = $db->prepare("INSERT INTO comment (comment_id, comment_content, comment_author, comment_creation_time, post_code) VALUES (Null, ?, ?, NOW(), ?)");
+        $stmt->bind_param("ssi", $content, $author, $post_id);
+        $stmt->execute();
     }
 
     if (isset($_POST['functionname'])) {

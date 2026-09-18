@@ -1,5 +1,13 @@
 <?php
     include_once('db.php');
+
+    $comment_counts = [];
+    $count_result = $db->query("SELECT post_code, COUNT(*) AS comment_count FROM comment GROUP BY post_code");
+    if ($count_result) {
+        while ($row = $count_result->fetch_assoc()) {
+            $comment_counts[$row['post_code']] = $row['comment_count'];
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html>
@@ -137,7 +145,8 @@
                             $html .= "</div><div class=\"card-footer\">";
                             $html .= "<div id=\"like-container\" class=\"d-inline-block\"><a href=\"#\" class=\"like-btn\"><i class=\"fa fa-thumbs-up\">&nbsp;</i></a><span class=\"count\">".$row['post_likes']."</span></div>&nbsp;&nbsp;";
                             $html .= "<div id=\"dislike-container\" class=\"d-inline-block\"><a href=\"#\" class=\"dislike-btn\"><i class=\"fa fa-thumbs-down\">&nbsp;</i></a><span class=\"count\">".$row['post_dislikes']."</span></div>";
-                            $html .= "<a href=\"#\" class=\"comments-btn\" style=\"float:right;\"><i class=\"fa fa-comments\"></i></a>";
+                            $comment_count = isset($comment_counts[$row['post_id']]) ? $comment_counts[$row['post_id']] : 0;
+                            $html .= "<a href=\"#\" class=\"comments-btn\" style=\"float:right;\"><i class=\"fa fa-comments\"></i>&nbsp;<span class=\"count\">".$comment_count."</span></a>";
                             $html .= "</div></div><br>";
                             echo($html);
                         }

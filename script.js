@@ -22,11 +22,7 @@ $(document).ready(function(){
     });
 
     $("#dark-mode").on("click", function() {
-        if ($("body").css("background-color") == "rgb(33, 37, 41)") {
-            $("body").css("background-color", "#fff");
-        } else {
-            $("body").css("background-color", "#212529");
-        }
+        $("body").toggleClass("dark-mode");
     });
 
     $(".like-btn").on("click", function(e) {
