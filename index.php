@@ -1,5 +1,6 @@
 <?php
     include_once('db.php');
+    include_once('helpers.php');
 
     $comment_counts = [];
     $count_result = $db->query("SELECT post_code, COUNT(*) AS comment_count FROM comment GROUP BY post_code");
@@ -135,15 +136,15 @@
                     if ($result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
                             $html = "<div class=\"card\"><div class=\"card-body\">";
-                            $html .= "<h5 id=\"".$row['post_id']."\" class=\"card-title d-inline-block\">".htmlspecialchars($row['post_title'], ENT_QUOTES, 'UTF-8')."</h5>&nbsp;&nbsp;";
+                            $html .= "<h5 id=\"".$row['post_id']."\" class=\"card-title d-inline-block\">".h($row["post_title"])."</h5>&nbsp;&nbsp;";
                             $tags = ($row['post_tags'] !== null && $row['post_tags'] !== '') ? explode(",", $row['post_tags']) : [];
                             foreach ($tags as $tag) {
-                                $html .= "<h6 class=\"card-subtitle d-inline-block\"><span class=\"badge bg-primary\">".htmlspecialchars($tag, ENT_QUOTES, 'UTF-8')."</span></h6>&nbsp;";
+                                $html .= "<h6 class=\"card-subtitle d-inline-block\"><span class=\"badge bg-primary\">".h($tag)."</span></h6>&nbsp;";
                             }
                             $datetime = date("j M, Y - H:i:s", strtotime($row['post_creation_time']));
                             $html .= "<h6 class=\"card-subtitle mb-2 text-muted d-inline-block\" style=\"float:right;\"><i class=\"	fa fa-clock-o\"></i>&nbsp;&nbsp;".$datetime."</h5>";
-                            $html .= "<h6 class=\"card-subtitle mb-2 text-muted\">by ".htmlspecialchars($row['post_author'], ENT_QUOTES, 'UTF-8')."</h6>";
-                            $html .= "<p class=\"card-text\">".htmlspecialchars($row['post_content'], ENT_QUOTES, 'UTF-8')."</p>";
+                            $html .= "<h6 class=\"card-subtitle mb-2 text-muted\">by ".h($row["post_author"])."</h6>";
+                            $html .= "<p class=\"card-text\">".h($row["post_content"])."</p>";
                             $html .= "</div><div class=\"card-footer\">";
                             $html .= "<div id=\"like-container\" class=\"d-inline-block\"><a href=\"#\" class=\"like-btn\"><i class=\"fa fa-thumbs-up\">&nbsp;</i></a><span class=\"count\">".$row['post_likes']."</span></div>&nbsp;&nbsp;";
                             $html .= "<div id=\"dislike-container\" class=\"d-inline-block\"><a href=\"#\" class=\"dislike-btn\"><i class=\"fa fa-thumbs-down\">&nbsp;</i></a><span class=\"count\">".$row['post_dislikes']."</span></div>";
