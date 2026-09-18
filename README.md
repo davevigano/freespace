@@ -27,7 +27,6 @@ Requires [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 ```bash
 git clone https://github.com/davevigano/freespace.git
 cd freespace
-cp db.example.php db.php
 docker compose up -d
 ```
 
@@ -49,7 +48,7 @@ Add `-v` to also drop the database volume and start fresh next time.
 | --- | --- |
 | `index.php` | Renders the feed |
 | `functions.php` | Handles the AJAX actions (new post, like/dislike, comments) |
-| `db.php` | Database connection (gitignored — copy it from `db.example.php`) |
+| `db.php` | Database connection; reads host/user/password/db/port from env vars (`MYSQLHOST`, `MYSQLUSER`, `MYSQLPASSWORD`, `MYSQLDATABASE`, `MYSQLPORT`), falling back to the `docker-compose.yml` defaults |
 | `schema.sql` | `post` / `comment` table definitions |
 | `seed.sql` | Sample data loaded on first container start |
 | `docker-compose.yml` / `Dockerfile` | Local dev environment (PHP+Apache and MySQL containers) |
