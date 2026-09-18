@@ -44,10 +44,10 @@
                 $html = "<input type=\"hidden\" id=\"post-id\" value=\"".$post_id."\">";
                 while ($row = $result->fetch_assoc()) {
                     $html .= "<div class=\"card\"><div class=\"card-body\">";
-                    $html .= "<h6 class=\"card-subtitle mb-2 text-muted d-inline-block\">".$row['comment_author']."</h6>";
+                    $html .= "<h6 class=\"card-subtitle mb-2 text-muted d-inline-block\">".htmlspecialchars($row['comment_author'], ENT_QUOTES, 'UTF-8')."</h6>";
                     $datetime = date("j M, Y - H:i:s", strtotime($row['comment_creation_time']));
                     $html .= "<h6 class=\"card-subtitle mb-2 text-muted d-inline-block\" style=\"float:right;\"><i class=\"fa fa-clock-o\"></i>&nbsp;&nbsp;".$datetime."</h6>";
-                    $html .= "<p class=\"card-text\">".$row['comment_content']."</p>";
+                    $html .= "<p class=\"card-text\">".htmlspecialchars($row['comment_content'], ENT_QUOTES, 'UTF-8')."</p>";
                     $html .= "</div></div><br>";
                 }
                 echo(json_encode($html));
