@@ -1,8 +1,8 @@
-FROM php:8.2-apache
+FROM php:8.2-cli
 RUN docker-php-ext-install mysqli
 
-COPY docker/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+WORKDIR /var/www/html
+COPY index.php functions.php db.php script.js style.css ./
 
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["apache2-foreground"]
+EXPOSE 80
+CMD ["sh", "-c", "php -S 0.0.0.0:${PORT:-80}"]
