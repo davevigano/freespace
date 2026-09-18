@@ -6,6 +6,8 @@ No moderation, no accounts: just pure fun!
 
 Post something, tag it, like or dislike other people's posts, and leave comments — all anonymous, all disposable.
 
+**Live demo:** [web-production-8d26a.up.railway.app](https://web-production-8d26a.up.railway.app)
+
 ## Features
 
 - Text posts with title, content and comma-separated tags
@@ -15,7 +17,7 @@ Post something, tag it, like or dislike other people's posts, and leave comments
 
 ## Tech stack
 
-- PHP (`mysqli`, prepared statements) served by Apache
+- PHP (`mysqli`, prepared statements) served via its built-in dev server
 - MySQL 8
 - Vanilla JS + jQuery + Bootstrap 5.1.3 on the frontend
 - Everything runs in Docker, no local PHP/MySQL install required
@@ -51,13 +53,24 @@ Add `-v` to also drop the database volume and start fresh next time.
 | `db.php` | Database connection; reads host/user/password/db/port from env vars (`MYSQLHOST`, `MYSQLUSER`, `MYSQLPASSWORD`, `MYSQLDATABASE`, `MYSQLPORT`), falling back to the `docker-compose.yml` defaults |
 | `schema.sql` | `post` / `comment` table definitions |
 | `seed.sql` | Sample data loaded on first container start |
-| `docker-compose.yml` / `Dockerfile` | Local dev environment (PHP+Apache and MySQL containers) |
+| `docker-compose.yml` / `Dockerfile` | Local dev environment and deploy image (PHP and MySQL containers) |
+
+## Deployment
+
+The live demo runs on [Railway](https://railway.app) (free tier): a `web` service built straight from the `Dockerfile`, and a `MySQL` service, connected via Railway's private network. `db.php` picks up `MYSQLHOST`/`MYSQLUSER`/`MYSQLPASSWORD`/`MYSQLDATABASE`/`MYSQLPORT` automatically from the environment Railway injects.
+
+To redeploy after pulling changes:
+
+```bash
+railway up --service web
+```
+
+`schema.sql` / `seed.sql` are only auto-applied by the local `docker-compose.yml` setup — on Railway they were loaded once by hand via `railway connect MySQL --tunnel-only`.
 
 ## Known limitations
 
-This project prioritizes simplicity over hardening — it has no accounts and no moderation by design. A couple of things worth knowing if you plan to run it anywhere but your own machine:
+This project prioritizes simplicity over hardening — it has no accounts and no moderation by design.
 
-- Post/comment content is rendered without HTML-escaping, so it's vulnerable to stored XSS.
 - There's no rate limiting or spam protection.
 
 ## License
