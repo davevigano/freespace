@@ -136,7 +136,7 @@
                         while ($row = $result->fetch_assoc()) {
                             $html = "<div class=\"card\"><div class=\"card-body\">";
                             $html .= "<h5 id=\"".$row['post_id']."\" class=\"card-title d-inline-block\">".htmlspecialchars($row['post_title'], ENT_QUOTES, 'UTF-8')."</h5>&nbsp;&nbsp;";
-                            $tags = explode(",", $row['post_tags']);
+                            $tags = ($row['post_tags'] !== null && $row['post_tags'] !== '') ? explode(",", $row['post_tags']) : [];
                             foreach ($tags as $tag) {
                                 $html .= "<h6 class=\"card-subtitle d-inline-block\"><span class=\"badge bg-primary\">".htmlspecialchars($tag, ENT_QUOTES, 'UTF-8')."</span></h6>&nbsp;";
                             }

@@ -1,5 +1,12 @@
 $(document).ready(function(){
 
+    try {
+        if (localStorage.getItem("darkMode") === "1") {
+            $("body").addClass("dark-mode");
+            $("#dark-mode").prop("checked", true);
+        }
+    } catch (e) {}
+
     $("#new-post").on("click", function(e) {
         e.preventDefault();
         $("#new-post-author, #new-post-title, #new-post-content").val("");
@@ -23,6 +30,9 @@ $(document).ready(function(){
 
     $("#dark-mode").on("click", function() {
         $("body").toggleClass("dark-mode");
+        try {
+            localStorage.setItem("darkMode", $("body").hasClass("dark-mode") ? "1" : "0");
+        } catch (e) {}
     });
 
     $(".like-btn").on("click", function(e) {
