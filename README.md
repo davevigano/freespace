@@ -6,7 +6,7 @@ No moderation, no accounts: just pure fun!
 
 Post something, tag it, like or dislike other people's posts, and leave comments — all anonymous, all disposable.
 
-**Live demo:** [web-production-8d26a.up.railway.app](https://web-production-8d26a.up.railway.app)
+**Live demo:** [web-production-8d26a.up.railway.app](https://web-production-8d26a.up.railway.app) (shortlink: [tinyurl.com/26o2arkz](https://tinyurl.com/26o2arkz))
 
 ## Features
 
