@@ -42,18 +42,22 @@
         $result = $stmt->get_result();
         if ($result) {
             if ($result->num_rows > 0) {
-                $html = "<input type=\"hidden\" id=\"post-id\" value=\"".$post_id."\">";
+                $html = "<input type=\"hidden\" id=\"post-id\" value=\"".$post_id."\"><div class=\"comment-list\">";
                 while ($row = $result->fetch_assoc()) {
+                    $comment_time = strtotime($row['comment_creation_time']);
+                    $datetime = date("j M, Y", $comment_time)." · ".date("H:i", $comment_time);
                     $html .= "<div class=\"card\"><div class=\"card-body\">";
-                    $html .= "<h6 class=\"card-subtitle mb-2 text-muted d-inline-block\">".h($row['comment_author'])."</h6>";
-                    $datetime = date("j M, Y - H:i:s", strtotime($row['comment_creation_time']));
-                    $html .= "<h6 class=\"card-subtitle mb-2 text-muted d-inline-block\" style=\"float:right;\"><i class=\"fa fa-clock-o\"></i>&nbsp;&nbsp;".$datetime."</h6>";
+                    $html .= "<div class=\"card-meta\">";
+                    $html .= "<span class=\"meta-author\">".h($row['comment_author'])."</span>";
+                    $html .= "<span class=\"meta-time\"><i class=\"fa fa-clock-o\"></i>".$datetime."</span>";
+                    $html .= "</div>";
                     $html .= "<p class=\"card-text\">".h($row['comment_content'])."</p>";
-                    $html .= "</div></div><br>";
+                    $html .= "</div></div>";
                 }
+                $html .= "</div>";
                 echo(json_encode($html));
-            } else { echo(json_encode("<input type=\"hidden\" id=\"post-id\" value=\"".$post_id."\"><h3 class=\"text-muted\">There seems to be nothing here...</h1>")); }
-        } else { echo(json_encode("<input type=\"hidden\" id=\"post-id\" value=\"".$post_id."\"><h3 class=\"text-muted\">Something went wrong...</h1>")); }
+            } else { echo(json_encode("<input type=\"hidden\" id=\"post-id\" value=\"".$post_id."\"><p class=\"empty-state\">There seems to be nothing here&hellip;</p>")); }
+        } else { echo(json_encode("<input type=\"hidden\" id=\"post-id\" value=\"".$post_id."\"><p class=\"empty-state\">Something went wrong&hellip;</p>")); }
     }
 
     function new_comment($author, $content, $post_id) {
